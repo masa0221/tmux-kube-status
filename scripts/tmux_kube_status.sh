@@ -3,21 +3,10 @@
 script_dir=$(dirname "$0")
 source ${script_dir}/helpers.sh
 
-dev_fg_color=$(get_tmux_option '@kube-status-dev-fg-color' '255')
-dev_bg_color=$(get_tmux_option '@kube-status-dev-bg-color' '27')
-dev_bold=$(get_tmux_option '@kube-status-dev-bold' '1')
-
-test_fg_color=$(get_tmux_option '@kube-status-test-fg-color' '255')
-test_bg_color=$(get_tmux_option '@kube-status-test-bg-color' '28')
-test_bold=$(get_tmux_option '@kube-status-test-bold' '1')
-
-stg_fg_color=$(get_tmux_option '@kube-status-stg-fg-color' '255')
-stg_bg_color=$(get_tmux_option '@kube-status-stg-bg-color' '136')
-stg_bold=$(get_tmux_option '@kube-status-stg-bold' '1')
-
-prod_fg_color=$(get_tmux_option '@kube-status-prod-fg-color' '255')
-prod_bg_color=$(get_tmux_option '@kube-status-prod-bg-color' '200')
-prod_bold=$(get_tmux_option '@kube-status-prod-bold' '1')
+format_dev=$(get_tmux_option '@kube-status-format-dev' '#[fg=colour255,bg=colour27]')
+format_test=$(get_tmux_option '@kube-status-format-test' '#[fg=colour255,bg=colour28]')
+format_stg=$(get_tmux_option '@kube-status-format-stage' '#[fg=colour255,bg=colour136]')
+format_prod=$(get_tmux_option '@kube-status-format-prod' '#[fg=colour255,bg=colour200]')
 
 context_cutoff_length=$(get_tmux_option '@kube-status-context-cutoff-length' '20')
 empty_context_string=$(get_tmux_option '@kube-status-empty-context-string' '-')
@@ -87,13 +76,8 @@ get_output_context_string() {
 get_output() {
   local context=$(get_output_context_string ${1})
   local env=${2}
-  local fg_color_variable="${env}_fg_color"
-  local bg_color_variable="${env}_bg_color"
-  local bold_variable="${env}_bold"
-  local fg=${!fg_color_variable}
-  local bg=${!bg_color_variable}
-  local bold=$( [ "${!bold_variable}" == "1" ] && echo ",bold" || echo "" )
-  echo "#[fg=colour${fg},bg=colour${bg}${bold}] ⎈ ${context} #[default]"
+  local format_variable="format_${env}"
+  echo "${!format_variable} ⎈ ${context} #[default]"
 }
 
 for arg in "$@"; do
