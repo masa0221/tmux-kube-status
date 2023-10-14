@@ -55,20 +55,15 @@ get_context_env() {
   local stg_pattern=$(get_tmux_option '@kube-status-stg-pattern' '.*stg.*|.*stage.*')
   local test_pattern=$(get_tmux_option '@kube-status-test-pattern' '.*test.*')
 
-  case "${kube_context}" in
-    ${prod_pattern})
-      echo "prod"
-      ;;
-    ${stg_pattern})
-      echo "stg"
-      ;;
-    ${test_pattern})
-      echo "test"
-      ;;
-    *)
-      echo "dev"
-      ;;
-  esac
+  if [[ $kube_context =~ $prod_pattern ]]; then
+    echo "prod"
+  elif [[ $kube_context =~ $stg_pattern ]]; then
+    echo "stg"
+  elif [[ $kube_context =~ $test_pattern ]]; then
+    echo "test"
+  else
+    echo "dev"
+  fi
 }
 
 get_output_context_string() {
