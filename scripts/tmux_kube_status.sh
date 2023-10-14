@@ -12,6 +12,7 @@ context_cutoff_length=$(get_tmux_option '@kube-status-context-cutoff-length' '20
 empty_context_string=$(get_tmux_option '@kube-status-empty-context-string' '-')
 
 kube_context=""
+kube_namespace=""
 
 debug_print() {
   # show the 256 colors
@@ -35,6 +36,16 @@ get_kube_context() {
     [ -x "$(command -v kubectl)" ] || return 0
     kube_context=$(kubectl config current-context)
     echo ${kube_context}
+  fi
+}
+
+get_kube_namespace() {
+  if [ -n "${kube_namespace}" ]; then
+    echo ${kube_namespace}
+  else
+    [ -x "$(command -v kubectl)" ] || return 0
+    kube_namespace=$(kubectl config view --minify --output 'jsonpath={..namespace}')
+    echo ${kube_namespace}
   fi
 }
 
@@ -74,10 +85,15 @@ get_output_context_string() {
 }
 
 get_output() {
-  local context=$(get_output_context_string ${1})
-  local env=${2}
+  local env=${1}
+  local context=$(get_output_context_string ${2})
+  local namespace=$(get_output_context_string ${3})
+  local formatted_namespace=""
+  if [[ "${namespace}" == "${empty_context_string}" ]]; then
+    formatted_namespace=""
+  fi
   local format_variable="format_${env}"
-  echo "${!format_variable} ⎈ ${context} #[default]"
+  echo "${!format_variable} ⎈ ${context}${formatted_namespace} #[default]"
 }
 
 for arg in "$@"; do
@@ -93,5 +109,5 @@ for arg in "$@"; do
   esac
 done
 
-echo -e $(get_output $(get_kube_context) $(get_context_env))
+echo -e $(get_output $(get_context_env) $(get_kube_context) $(get_kube_namespace))
 
