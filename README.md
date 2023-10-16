@@ -30,11 +30,22 @@ run-shell /path/to/tmux-kube-status/kube_status.tmux
 
 ## Usage
 
-To display your Kubernetes context and environment, add this line to your `.tmux.conf`:
+To display your Kubernetes context and environment in the Tmux status line, add this line to your `.tmux.conf`:
 
 ```bash
 set-option -g status-right "#{kube_status}"
 ```
+
+### Note on Refresh Rate
+
+To minimize the chance of displaying outdated information, you may optionally set the `status-interval`:
+
+```bash
+set-option -g status-interval 1
+```
+
+This will refresh the Tmux status line every second.
+
 
 ## Configuration
 
