@@ -1,87 +1,72 @@
 # kube_status.tmux
 
-`kube_status.tmux` is a Tmux plugin that displays your current Kubernetes context and environment (dev, test, staging, prod) in the Tmux status line. It's recommended to manage the installation of this plugin using [tmux-plugin-manager (TPM)](https://github.com/tmux-plugins/tpm).
+`kube_status.tmux` is a Tmux plugin designed to show your current Kubernetes context and environment (dev, test, staging, prod) in the Tmux status line. Use [tmux-plugin-manager (TPM)](https://github.com/tmux-plugins/tpm) for easier installation and management.
 
 ## Installation
 
 ### Recommended Method: Using tmux-plugin-manager (TPM)
 
-1. Add this line to your `.tmux.conf`:
+1. Add the following line to your `.tmux.conf`:
 
 ```bash
 set -g @plugin 'masa0221/tmux-kube-status'
 ```
 
-2. Press `prefix` + <kbd>I</kbd> to install the plugin.
+2. Press `prefix` + <kbd>I</kbd> to fetch and install the plugin.
 
 ### Manual Method
 
-1. Clone this repository or download the scripts (`kube_status.tmux` and `tmux_kube_status.sh`).
+1. Clone this repository:
 
-```
+```bash
 git clone git@github.com:masa0221/tmux-kube-status.git
 ```
 
-2. Source the `kube_status.tmux` script in your `.tmux.conf`:
+2. In your `.tmux.conf`, source `kube_status.tmux`:
 
-
-```
+```bash
 run-shell /path/to/tmux-kube-status/kube_status.tmux
 ```
 
 ## Usage
 
-After installing the plugin, your Kubernetes context and environment will be automatically displayed in your Tmux status line.
+To display your Kubernetes context and environment, add this line to your `.tmux.conf`:
+
+```bash
+set-option -g status-right "#{kube_status}"
+```
 
 ## Configuration
 
-You can configure various options using Tmux options. Here is a hierarchical summary:
+Here is an example of how to configure kube_status.tmux. If not set, the plugin will use default values:
 
-- `@kube-status-format-dev`
-  - Defines text color and background for dev environment
-  - Default: `#[fg=colour255,bg=colour27]`
+```bash
+set -g @kube-status-format-dev '#[fg=colour255,bg=colour27]'
+set -g @kube-status-context-cutoff-length '20'
+```
 
-- `@kube-status-format-test`
-  - Defines text color and background for test environment
-  - Default: `#[fg=colour255,bg=colour28]`
+### Configuration Table
 
-- `@kube-status-format-stage`
-  - Defines text color and background for staging environment
-  - Default: `#[fg=colour255,bg=colour136]`
-
-- `@kube-status-format-prod`
-  - Defines text color and background for prod environment
-  - Default: `#[fg=colour255,bg=colour200]`
-
-- `@kube-status-context-cutoff-length`
-  - Sets maximum length for Kubernetes context name
-  - Default: `20`
-
-- `@kube-status-empty-context-string`
-  - Sets string to display when no Kubernetes context is available
-  - Default: `-`
-
-- `@kube-status-prod-pattern`
-  - Regex pattern to match a production environment
-  - Default: `.*prod.*`
-
-- `@kube-status-stg-pattern`
-  - Regex pattern to match a staging environment
-  - Default: `.*stg.*|.*stage.*`
-
-- `@kube-status-test-pattern`
-  - Regex pattern to match a test environment
-  - Default: `.*test.*`
+| Option                              | Description                                          | Default              |
+|-------------------------------------|------------------------------------------------------|----------------------|
+| `@kube-status-format-dev`           | Text color and background for dev environment        | `#[fg=colour255,bg=colour27]` |
+| `@kube-status-format-test`          | Text color and background for test environment       | `#[fg=colour255,bg=colour28]` |
+| `@kube-status-format-stage`         | Text color and background for staging environment    | `#[fg=colour255,bg=colour136]` |
+| `@kube-status-format-prod`          | Text color and background for prod environment       | `#[fg=colour255,bg=colour200]` |
+| `@kube-status-context-cutoff-length`| Max length for Kubernetes context name               | `20`                  |
+| `@kube-status-empty-context-string` | String when no Kubernetes context is available       | `-`                   |
+| `@kube-status-prod-pattern`         | Regex pattern for production environment             | `.*prod.*`            |
+| `@kube-status-stg-pattern`          | Regex pattern for staging environment                | `.*stg.*\|.*stage.*`  |
+| `@kube-status-test-pattern`         | Regex pattern for test environment                   | `.*test.*`            |
 
 ## Debugging
 
-The `tmux_kube_status.sh` script supports the `--debug` and `--debug-with-color-code` flags for debugging purposes.
+Use `--debug` and `--debug-with-color-code` flags with `tmux_kube_status.sh` for debugging.
 
 ## Contributing
 
-Feel free to create an issue or submit a pull request.
+Open an issue or submit a pull request if you'd like to contribute.
 
 ## License
 
 MIT
-
