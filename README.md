@@ -36,7 +36,7 @@ run-shell /path/to/tmux-kube-status/kube_status.tmux
 
 ## Usage
 
-To display your Kubernetes context and environment in the Tmux status line, add this line to your `.tmux.conf`:
+To display your Kubernetes context in the Tmux status line, add this line to your `.tmux.conf`:
 
 ```bash
 set-option -g status-right "#{kube_status}"
@@ -55,7 +55,7 @@ This will refresh the Tmux status line every second.
 
 ## Configuration
 
-Here is an example of how to configure kube_status.tmux. If not set, the plugin will use default values:
+Here is an example of how to configure kube_status.tmux in your `.tmux.conf` file. If not set, the plugin will use default values:
 
 ```bash
 set -g @kube-status-format-dev '#[fg=colour255,bg=colour27]'
@@ -75,6 +75,16 @@ set -g @kube-status-context-cutoff-length '20'
 | `@kube-status-prod-pattern`         | Regex pattern for production environment             | `.*prod.*`            |
 | `@kube-status-stg-pattern`          | Regex pattern for staging environment                | `.*stg.*\|.*stage.*`  |
 | `@kube-status-test-pattern`         | Regex pattern for test environment                   | `.*test.*`            |
+
+### Troubleshooting
+
+If your settings do not seem to take effect, you can verify the current values with `tmux show-option`. For example, to check the value of `@kube-status-format-dev`, you can use:
+
+```bash
+tmux show-option -gqv @kube-status-format-dev
+```
+This will show you the current setting, helping you to debug any configuration issues.
+
 
 ## Debugging
 
