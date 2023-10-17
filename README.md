@@ -2,6 +2,12 @@
 
 `kube_status.tmux` is a Tmux plugin designed to show your current Kubernetes context and environment (dev, test, staging, prod) in the Tmux status line. Use [tmux-plugin-manager (TPM)](https://github.com/tmux-plugins/tpm) for easier installation and management.
 
+## Preview
+
+For a dynamic preview of how `kube_status.tmux` will look and behave, check out the GIF below:
+
+![kube_status.tmux in action](./images/demo.gif)
+
 ## Installation
 
 ### Recommended Method: Using tmux-plugin-manager (TPM)
