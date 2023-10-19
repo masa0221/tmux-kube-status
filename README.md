@@ -65,17 +65,18 @@ set -g @kube-status-context-cutoff-length '20'
 
 ### Configuration Table
 
-| Option                              | Description                                          | Default              |
-|-------------------------------------|------------------------------------------------------|----------------------|
-| `@kube-status-format-dev`           | Text color and background for dev environment        | `#[fg=colour255,bg=colour27]` |
-| `@kube-status-format-test`          | Text color and background for test environment       | `#[fg=colour255,bg=colour28]` |
-| `@kube-status-format-stage`         | Text color and background for staging environment    | `#[fg=colour255,bg=colour136]` |
-| `@kube-status-format-prod`          | Text color and background for prod environment       | `#[fg=colour255,bg=colour200]` |
-| `@kube-status-context-cutoff-length`| Max length for Kubernetes context name               | `20`                  |
-| `@kube-status-empty-context-string` | String when no Kubernetes context is available       | `-`                   |
-| `@kube-status-prod-pattern`         | Regex pattern for production environment             | `.*prod.*`            |
-| `@kube-status-stg-pattern`          | Regex pattern for staging environment                | `.*stg.*\|.*stage.*`  |
-| `@kube-status-test-pattern`         | Regex pattern for test environment                   | `.*test.*`            |
+| Option                                | Description                                          | Default                        |
+|-------------------------------------  |------------------------------------------------------|--------------------------------|
+| `@kube-status-format-dev`             | Text color and background for dev environment        | `#[fg=colour255,bg=colour27]`  |
+| `@kube-status-format-test`            | Text color and background for test environment       | `#[fg=colour255,bg=colour28]`  |
+| `@kube-status-format-stage`           | Text color and background for staging environment    | `#[fg=colour255,bg=colour136]` |
+| `@kube-status-format-prod`            | Text color and background for prod environment       | `#[fg=colour255,bg=colour200]` |
+| `@kube-status-context-cutoff-length`  | Max length for Kubernetes context name               | `20`                           |
+| `@kube-status-namespace-cutoff-length`| Max length for Kubernetes namespace                  | `20`                           |
+| `@kube-status-empty-context-string`   | String when no Kubernetes context is available       | `-`                            |
+| `@kube-status-prod-pattern`           | Regex pattern for production environment             | `.*prod.*`                     |
+| `@kube-status-stg-pattern`            | Regex pattern for staging environment                | `.*stg.*\|.*stage.*`           |
+| `@kube-status-test-pattern`           | Regex pattern for test environment                   | `.*test.*`                     |
 
 ### Troubleshooting
 
