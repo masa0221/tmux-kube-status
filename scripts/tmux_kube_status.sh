@@ -9,6 +9,12 @@ format_test=$(get_tmux_option '@kube-status-format-test' '#[fg=colour255,bg=colo
 format_stg=$(get_tmux_option '@kube-status-format-stage' '#[fg=colour255,bg=colour136]')
 format_prod=$(get_tmux_option '@kube-status-format-prod' '#[fg=colour255,bg=colour200]')
 
+icon_default=$(get_tmux_option '@kube-status-icon-default' '⎈')
+icon_dev=$(get_tmux_option '@kube-status-icon-dev' '⎈')
+icon_test=$(get_tmux_option '@kube-status-icon-test' '⎈')
+icon_stg=$(get_tmux_option '@kube-status-icon-stage' '⎈')
+icon_prod=$(get_tmux_option '@kube-status-icon-prod' '⎈')
+
 context_cutoff_length=$(get_tmux_option '@kube-status-context-cutoff-length' '20')
 namespace_cutoff_length=$(get_tmux_option '@kube-status-namespace-cutoff-length' '20')
 empty_context_string=$(get_tmux_option '@kube-status-empty-context-string' '-')
@@ -104,7 +110,8 @@ get_output() {
     namespace=":$namespace"
   fi
   local format_variable="format_${env:-"default"}"
-  echo "${!format_variable} ⎈ ${context}${namespace} #[default]"
+  local icon_variable="icon_${env:-"default"}"
+  echo "${!format_variable} ${!icon_variable} ${context}${namespace} #[default]"
 }
 
 for arg in "$@"; do

@@ -59,8 +59,9 @@ This will refresh the Tmux status line every second.
 Here is an example of how to configure kube_status.tmux in your `.tmux.conf` file. If not set, the plugin will use default values:
 
 ```bash
-set -g @kube-status-format-dev '#[fg=colour255,bg=colour27]'
-set -g @kube-status-context-cutoff-length '20'
+set -g @kube-status-format-prod '#[fg=colour255,bg=colour200,bold]'
+set -g @kube-status-icon-prod '⚠️  '
+set -g @kube-status-context-cutoff-length '50'
 ```
 
 ### Configuration Table
@@ -72,6 +73,11 @@ set -g @kube-status-context-cutoff-length '20'
 | `@kube-status-format-test`            | Text color and background for test environment       | `#[fg=colour255,bg=colour28]`  |
 | `@kube-status-format-stage`           | Text color and background for staging environment    | `#[fg=colour255,bg=colour136]` |
 | `@kube-status-format-prod`            | Text color and background for prod environment       | `#[fg=colour255,bg=colour200]` |
+| `@kube-status-icon-default`           | Icon for default                                     | `⎈`                            |
+| `@kube-status-icon-dev`               | Icon for dev environment                             | `⎈`                            |
+| `@kube-status-icon-test`              | Icon for test environment                            | `⎈`                            |
+| `@kube-status-icon-stage`             | Icon for staging environment                         | `⎈`                            |
+| `@kube-status-icon-prod`              | Icon for prod environment                            | `⎈`                            |
 | `@kube-status-context-cutoff-length`  | Max length for Kubernetes context name               | `20`                           |
 | `@kube-status-namespace-cutoff-length`| Max length for Kubernetes namespace                  | `20`                           |
 | `@kube-status-empty-context-string`   | String when no Kubernetes context is available       | `-`                            |
