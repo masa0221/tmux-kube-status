@@ -3,6 +3,7 @@
 script_dir=$(dirname "$0")
 source ${script_dir}/helpers.sh
 
+format_default=$(get_tmux_option '@kube-status-format-default' '#[fg=colour255,bg=colour27]')
 format_dev=$(get_tmux_option '@kube-status-format-dev' '#[fg=colour255,bg=colour27]')
 format_test=$(get_tmux_option '@kube-status-format-test' '#[fg=colour255,bg=colour28]')
 format_stg=$(get_tmux_option '@kube-status-format-stage' '#[fg=colour255,bg=colour136]')
@@ -25,12 +26,13 @@ debug_print() {
   printf "$(get_output "test" "test-env" "namespace")\n"
   printf "$(get_output "stg" "stg-env" "namespace")\n"
   printf "$(get_output "prod" "prod-env" "namespace")\n"
-  printf "$(get_output "" "prod-env" "namespace")\n"
+  printf "$(get_output "" "default-env" "namespace")\n"
 
   printf "$(get_output "dev" "" "")\n"
   printf "$(get_output "dev" "context-only" "")\n"
   printf "$(get_output "dev" "long-context-name-abcdefghijklmnopqrstuvwxyz0123456789" "dev")\n"
   printf "$(get_output "dev" "context" "long-namespace-abcdefghijklmnopqrstuvwxyz0123456789")\n"
+  printf "$(get_output "dev" "long-context-name-abcdefghijklmnopqrstuvwxyz0123456789" "long-namespace-abcdefghijklmnopqrstuvwxyz0123456789")\n"
 }
 
 get_kube_context() {
@@ -58,6 +60,7 @@ get_context_env() {
   local prod_pattern=$(get_tmux_option '@kube-status-prod-pattern' '.*prod.*')
   local stg_pattern=$(get_tmux_option '@kube-status-stg-pattern' '.*stg.*|.*stage.*')
   local test_pattern=$(get_tmux_option '@kube-status-test-pattern' '.*test.*')
+  local dev_pattern=$(get_tmux_option '@kube-status-dev-pattern' '.*dev.*')
 
   if [[ $kube_context =~ $prod_pattern ]]; then
     echo "prod"
@@ -65,8 +68,10 @@ get_context_env() {
     echo "stg"
   elif [[ $kube_context =~ $test_pattern ]]; then
     echo "test"
-  else
+  elif [[ $kube_context =~ $test_pattern ]]; then
     echo "dev"
+  else
+    echo ""
   fi
 }
 
@@ -98,7 +103,7 @@ get_output() {
   else
     namespace=":$namespace"
   fi
-  local format_variable="format_${env}"
+  local format_variable="format_${env:-"default"}"
   echo "${!format_variable} ⎈ ${context}${namespace} #[default]"
 }
 
