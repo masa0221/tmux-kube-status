@@ -9,6 +9,7 @@ format_stg=$(get_tmux_option '@kube-status-format-stage' '#[fg=colour255,bg=colo
 format_prod=$(get_tmux_option '@kube-status-format-prod' '#[fg=colour255,bg=colour200]')
 
 context_cutoff_length=$(get_tmux_option '@kube-status-context-cutoff-length' '20')
+namespace_cutoff_length=$(get_tmux_option '@kube-status-namespace-cutoff-length' '20')
 empty_context_string=$(get_tmux_option '@kube-status-empty-context-string' '-')
 
 kube_context=""
@@ -20,13 +21,16 @@ debug_print() {
     for num in {0..255}; do printf "%s\033[38;5;${num}mcolour${num}\033[0m \t"; [ $(expr $((num+1)) % 8) -eq 0 ] && printf "\n"; done
   fi
 
-  printf "$(get_output "dev-env" "dev")\n"
-  printf "$(get_output "test-env" "test")\n"
-  printf "$(get_output "stg-env" "stg")\n"
-  printf "$(get_output "prod-env" "prod")\n"
+  printf "$(get_output "dev" "dev-env" "namespace")\n"
+  printf "$(get_output "test" "test-env" "namespace")\n"
+  printf "$(get_output "stg" "stg-env" "namespace")\n"
+  printf "$(get_output "prod" "prod-env" "namespace")\n"
+  printf "$(get_output "" "prod-env" "namespace")\n"
 
-  printf "$(get_output "" "dev")\n"
-  printf "$(get_output "long-context-name-abcdefghijklmnopqrstuvwxyz0123456789" "dev")\n"
+  printf "$(get_output "dev" "" "")\n"
+  printf "$(get_output "dev" "context-only" "")\n"
+  printf "$(get_output "dev" "long-context-name-abcdefghijklmnopqrstuvwxyz0123456789" "dev")\n"
+  printf "$(get_output "dev" "context" "long-namespace-abcdefghijklmnopqrstuvwxyz0123456789")\n"
 }
 
 get_kube_context() {
@@ -66,34 +70,36 @@ get_context_env() {
   fi
 }
 
-get_output_context_string() {
-  local original=${1:-"${empty_context_string}"}
+get_cutoff_string() {
+  local cutoff_length=${1}
+  local original=${2:-"${empty_context_string}"}
 
-  if [ -z "${context_cutoff_length}" ] || ! [[ "${context_cutoff_length}" =~ ^[0-9]+$ ]]; then
-    echo "context_cutoff_length needs to be an integer."
+  if [ -z "${cutoff_length}" ] || ! [[ "${cutoff_length}" =~ ^[0-9]+$ ]]; then
+    echo "cutoff_length needs to be an integer."
     return
   fi
-  if [ ${context_cutoff_length} -eq 0 ]; then
+  if [ ${cutoff_length} -eq 0 ]; then
     echo $original
     return
   fi
 
-  local cut_string="${original:0:$context_cutoff_length}"
-  [ "${#cut_string}" -eq "${context_cutoff_length}" ] && [ "${cut_string}" != "${original}" ] && cut_string+="..."
+  local cut_string="${original:0:$cutoff_length}"
+  [ "${#cut_string}" -eq "${cutoff_length}" ] && [ "${cut_string}" != "${original}" ] && cut_string+="…"
 
   echo ${cut_string}
 }
 
 get_output() {
   local env=${1}
-  local context=$(get_output_context_string ${2})
-  local namespace=$(get_output_context_string ${3})
-  local formatted_namespace=""
+  local context=$(get_cutoff_string ${context_cutoff_length} ${2})
+  local namespace=$(get_cutoff_string ${namespace_cutoff_length} ${3})
   if [[ "${namespace}" == "${empty_context_string}" ]]; then
-    formatted_namespace=""
+    namespace=""
+  else
+    namespace=":$namespace"
   fi
   local format_variable="format_${env}"
-  echo "${!format_variable} ⎈ ${context}${formatted_namespace} #[default]"
+  echo "${!format_variable} ⎈ ${context}${namespace} #[default]"
 }
 
 for arg in "$@"; do
