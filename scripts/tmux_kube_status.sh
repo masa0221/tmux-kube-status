@@ -15,8 +15,8 @@ icon_test=$(get_tmux_option '@kube-status-icon-test' '⎈')
 icon_stg=$(get_tmux_option '@kube-status-icon-stage' '⎈')
 icon_prod=$(get_tmux_option '@kube-status-icon-prod' '⎈')
 
-context_cutoff_length=$(get_tmux_option '@kube-status-context-cutoff-length' '20')
-namespace_cutoff_length=$(get_tmux_option '@kube-status-namespace-cutoff-length' '20')
+context_max_length=$(get_tmux_option '@kube-status-context-max-length' '20')
+namespace_max_length=$(get_tmux_option '@kube-status-namespace-max-length' '20')
 empty_context_string=$(get_tmux_option '@kube-status-empty-context-string' '-')
 
 kube_context=""
@@ -84,28 +84,28 @@ get_context_env() {
 }
 
 get_cutoff_string() {
-  local cutoff_length=${1}
+  local max_length=${1}
   local original=${2:-"${empty_context_string}"}
 
-  if [ -z "${cutoff_length}" ] || ! [[ "${cutoff_length}" =~ ^[0-9]+$ ]]; then
-    echo "cutoff_length needs to be an integer."
+  if [ -z "${max_length}" ] || ! [[ "${max_length}" =~ ^[0-9]+$ ]]; then
+    echo "max_length needs to be an integer."
     return
   fi
-  if [ ${cutoff_length} -eq 0 ]; then
+  if [ ${max_length} -eq 0 ]; then
     echo $original
     return
   fi
 
-  local cut_string="${original:0:$cutoff_length}"
-  [ "${#cut_string}" -eq "${cutoff_length}" ] && [ "${cut_string}" != "${original}" ] && cut_string+="…"
+  local cut_string="${original:0:$max_length}"
+  [ "${#cut_string}" -eq "${max_length}" ] && [ "${cut_string}" != "${original}" ] && cut_string+="…"
 
   echo ${cut_string}
 }
 
 get_output() {
   local env=${1}
-  local context=$(get_cutoff_string ${context_cutoff_length} ${2})
-  local namespace=$(get_cutoff_string ${namespace_cutoff_length} ${3})
+  local context=$(get_cutoff_string ${context_max_length} ${2})
+  local namespace=$(get_cutoff_string ${namespace_max_length} ${3})
   if [[ "${namespace}" == "${empty_context_string}" ]]; then
     namespace=""
   else

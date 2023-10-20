@@ -61,7 +61,7 @@ Here is an example of how to configure kube_status.tmux in your `.tmux.conf` fil
 ```bash
 set -g @kube-status-format-prod '#[fg=colour255,bg=colour200,bold]'
 set -g @kube-status-icon-prod '⚠️  '
-set -g @kube-status-context-cutoff-length '50'
+set -g @kube-status-context-max-length '50'
 ```
 
 ### Configuration Table
@@ -78,8 +78,8 @@ set -g @kube-status-context-cutoff-length '50'
 | `@kube-status-icon-test`              | Icon for test environment                            | `⎈`                            |
 | `@kube-status-icon-stage`             | Icon for staging environment                         | `⎈`                            |
 | `@kube-status-icon-prod`              | Icon for prod environment                            | `⎈`                            |
-| `@kube-status-context-cutoff-length`  | Max length for Kubernetes context name               | `20`                           |
-| `@kube-status-namespace-cutoff-length`| Max length for Kubernetes namespace                  | `20`                           |
+| `@kube-status-context-max-length`     | Max length for Kubernetes context name               | `20`                           |
+| `@kube-status-namespace-max-length`   | Max length for Kubernetes namespace                  | `20`                           |
 | `@kube-status-empty-context-string`   | String when no Kubernetes context is available       | `-`                            |
 | `@kube-status-dev-pattern`            | Regex pattern for dev environment                    | `.*dev.*`                      |
 | `@kube-status-test-pattern`           | Regex pattern for test environment                   | `.*test.*`                     |
