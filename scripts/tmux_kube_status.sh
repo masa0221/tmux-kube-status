@@ -32,13 +32,15 @@ debug_print() {
   printf "$(get_output "test" "test-env" "namespace")\n"
   printf "$(get_output "stg" "stg-env" "namespace")\n"
   printf "$(get_output "prod" "prod-env" "namespace")\n"
-  printf "$(get_output "" "default-env" "namespace")\n"
+  printf "$(get_output "default" "default-env" "namespace")\n"
 
   printf "$(get_output "dev" "" "")\n"
   printf "$(get_output "dev" "context-only" "")\n"
   printf "$(get_output "dev" "long-context-name-abcdefghijklmnopqrstuvwxyz0123456789" "dev")\n"
   printf "$(get_output "dev" "context" "long-namespace-abcdefghijklmnopqrstuvwxyz0123456789")\n"
   printf "$(get_output "dev" "long-context-name-abcdefghijklmnopqrstuvwxyz0123456789" "long-namespace-abcdefghijklmnopqrstuvwxyz0123456789")\n"
+
+  printf "$(get_output $(get_context_env) $(get_kube_context) $(get_kube_namespace))"
 }
 
 get_kube_context() {
@@ -77,7 +79,7 @@ get_context_env() {
   elif [[ $kube_context =~ $test_pattern ]]; then
     echo "dev"
   else
-    echo ""
+    echo "default"
   fi
 }
 
@@ -109,8 +111,8 @@ get_output() {
   else
     namespace=":$namespace"
   fi
-  local format_variable="format_${env:-"default"}"
-  local icon_variable="icon_${env:-"default"}"
+  local format_variable="format_${env}"
+  local icon_variable="icon_${env}"
   echo "${!format_variable} ${!icon_variable} ${context}${namespace} #[default]"
 }
 
