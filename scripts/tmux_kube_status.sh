@@ -76,7 +76,7 @@ get_context_env() {
     echo "stg"
   elif [[ $kube_context =~ $test_pattern ]]; then
     echo "test"
-  elif [[ $kube_context =~ $test_pattern ]]; then
+  elif [[ $kube_context =~ $dev_pattern ]]; then
     echo "dev"
   else
     echo "default"
