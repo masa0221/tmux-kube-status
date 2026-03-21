@@ -135,3 +135,15 @@ teardown() {
   local result=$(get_output "prod" "ctx" "ns")
   [[ "$result" == "#[fg=colour255,bg=colour200]"* ]]
 }
+
+# ============================================================
+# Empty context handling (integration-style)
+# ============================================================
+
+@test "empty context: script outputs nothing" {
+  # Simulate running the main script with no kubeconfig
+  export KUBECONFIG="/nonexistent/path"
+  local stdout
+  stdout=$(bash "${BATS_TEST_DIRNAME}/../scripts/tmux_kube_status.sh" 2>/dev/null)
+  [ "$stdout" = "" ]
+}
