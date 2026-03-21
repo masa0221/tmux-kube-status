@@ -140,10 +140,13 @@ teardown() {
 # Empty context handling (integration-style)
 # ============================================================
 
-@test "empty context: script outputs nothing" {
+@test "empty context: shows icon only" {
   # Simulate running the main script with no kubeconfig
   export KUBECONFIG="/nonexistent/path"
   local stdout
   stdout=$(bash "${BATS_TEST_DIRNAME}/../scripts/tmux_kube_status.sh" 2>/dev/null)
-  [ "$stdout" = "" ]
+  # Should output " ⎈ " with format codes
+  [[ "$stdout" == *" ⎈ "* ]]
+  # Should NOT contain context or namespace text
+  [[ "$stdout" != *":"* ]]
 }

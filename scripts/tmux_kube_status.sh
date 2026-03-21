@@ -144,7 +144,10 @@ if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
   done
 
   local ctx=$(get_kube_context)
-  [ -z "$ctx" ] && exit 0
-  echo -e $(get_output $(get_context_env) "$ctx" $(get_kube_namespace))
+  if [ -z "$ctx" ]; then
+    echo -e "${format_default} ${icon_default} #[default]"
+  else
+    echo -e $(get_output $(get_context_env) "$ctx" $(get_kube_namespace))
+  fi
 fi
 
