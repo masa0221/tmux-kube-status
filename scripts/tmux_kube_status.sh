@@ -12,7 +12,7 @@ get_kube_context() {
   else
     # Fallback to kubectl if parse_kubeconfig didn't set the value
     [ -x "$(command -v kubectl)" ] || return 0
-    kube_context=$(kubectl config current-context)
+    kube_context=$(kubectl config current-context 2>/dev/null)
     echo ${kube_context}
   fi
 }
@@ -23,7 +23,7 @@ get_kube_namespace() {
   else
     # Fallback to kubectl if parse_kubeconfig didn't set the value
     [ -x "$(command -v kubectl)" ] || return 0
-    kube_namespace=$(kubectl config view --minify --output 'jsonpath={..namespace}')
+    kube_namespace=$(kubectl config view --minify --output 'jsonpath={..namespace}' 2>/dev/null)
     echo ${kube_namespace}
   fi
 }
@@ -143,6 +143,8 @@ if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
     esac
   done
 
-  echo -e $(get_output $(get_context_env) $(get_kube_context) $(get_kube_namespace))
+  local ctx=$(get_kube_context)
+  [ -z "$ctx" ] && exit 0
+  echo -e $(get_output $(get_context_env) "$ctx" $(get_kube_namespace))
 fi
 
