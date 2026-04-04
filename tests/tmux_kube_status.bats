@@ -150,3 +150,21 @@ teardown() {
   # Should NOT contain context or namespace text
   [[ "$stdout" != *":"* ]]
 }
+
+@test "script run: prints current context from kubeconfig" {
+  local file="${TEST_TMPDIR}/kubeconfig"
+  cat > "$file" <<'EOF'
+apiVersion: v1
+kind: Config
+current-context: my-dev-cluster
+contexts:
+- context:
+    cluster: my-cluster
+    user: my-user
+  name: my-dev-cluster
+EOF
+  export KUBECONFIG="$file"
+  local stdout
+  stdout=$(bash "${BATS_TEST_DIRNAME}/../scripts/tmux_kube_status.sh" 2>/dev/null)
+  [[ "$stdout" == *"my-dev-cluster"* ]]
+}

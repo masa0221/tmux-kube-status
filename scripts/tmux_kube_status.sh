@@ -143,7 +143,7 @@ if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
     esac
   done
 
-  local ctx=$(get_kube_context)
+  ctx=$(get_kube_context)
   if [ -z "$ctx" ]; then
     echo -e "${format_default} ${icon_default} #[default]"
   else
